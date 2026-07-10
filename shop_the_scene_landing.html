@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop the Scene – Netflix</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #E50914;
+      --red-dark: #B20710;
+      --red-glow: rgba(229,9,20,0.18);
+      --bg: #080808;
+      --surface: #141414;
+      --surface2: #1e1e1e;
+      --border: #262626;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --gold: #F5A623;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 6%;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(0px);
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nf-logo { font-size: 1.9rem; font-weight: 900; color: var(--red); letter-spacing: -2px; line-height:1; }
+    .nav-pill {
+      background: rgba(229,9,20,0.12); border: 1px solid rgba(229,9,20,0.3);
+      color: #ff6b6b; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .nav-cta {
+      background: var(--red); color: #fff; border: none;
+      border-radius: 6px; padding: 8px 18px; font-size: 0.82rem;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--red-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 100px 6% 60px;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    /* Cinematic background */
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 30%, rgba(229,9,20,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(80,0,0,0.15) 0%, transparent 60%),
+        linear-gradient(180deg, #080808 0%, #0e0508 50%, #080808 100%);
+    }
+    /* Film grain overlay */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4; pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(229,9,20,0.1); border: 1px solid rgba(229,9,20,0.25);
+      color: #ff7878; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.03em; margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: normal; color: var(--red); }
+    .hero-sub {
+      font-size: 1.05rem; line-height: 1.7;
+      color: var(--text-muted); max-width: 480px;
+      margin: 0 auto 18px;
+    }
+    .hero-key {
+      display: inline-block;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 2px 8px; font-size: 0.9rem;
+      color: var(--text); font-weight: 600; margin: 0 2px;
+    }
+
+    /* ── PHONE MOCKUP ── */
+    .phone-wrap {
+      margin: 48px auto 0;
+      position: relative; display: inline-block;
+    }
+    .phone {
+      width: 280px;
+      background: #111;
+      border-radius: 40px;
+      border: 2px solid #2a2a2a;
+      box-shadow:
+        0 0 0 1px #1a1a1a,
+        0 40px 100px rgba(0,0,0,0.8),
+        0 0 60px rgba(229,9,20,0.12);
+      overflow: hidden;
+      position: relative;
+    }
+    /* Notch */
+    .phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100px; height: 28px;
+      background: #111; border-radius: 0 0 18px 18px;
+      z-index: 10;
+    }
+    /* Screen area */
+    .phone-screen {
+      background: #000;
+      height: 520px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Netflix player simulation */
+    .player-area {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(160deg, #12083a 0%, #1a0520 35%, #0d1520 65%, #081218 100%);
+    }
+    /* Simulated scene light/color */
+    .player-area::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 30% 40%, rgba(180,120,255,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 70% 60%, rgba(20,100,180,0.1) 0%, transparent 60%);
+    }
+    /* Scene text overlay */
+    .scene-info {
+      position: absolute; top: 36px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      z-index: 5;
+    }
+    .scene-badge {
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 0.62rem; color: #ccc; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .scene-progress {
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(6px);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 0.62rem; color: #888;
+    }
+    /* Central scene visual */
+    .scene-visual {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -55%);
+      text-align: center; z-index: 4;
+    }
+    .scene-figure {
+      font-size: 4rem; line-height: 1;
+      filter: drop-shadow(0 4px 20px rgba(180,120,255,0.3));
+    }
+    .scene-title {
+      font-size: 0.7rem; color: rgba(255,255,255,0.4);
+      margin-top: 8px; letter-spacing: 0.05em;
+    }
+    /* Player controls */
+    .player-controls {
+      position: absolute; bottom: 200px; left: 0; right: 0;
+      padding: 0 14px; z-index: 5;
+    }
+    .progress-bar {
+      height: 2px; background: rgba(255,255,255,0.2);
+      border-radius: 2px; margin-bottom: 10px; position: relative;
+    }
+    .progress-fill {
+      position: absolute; top: 0; left: 0;
+      width: 42%; height: 100%;
+      background: var(--red); border-radius: 2px;
+    }
+    .progress-dot {
+      position: absolute; top: 50%; left: 42%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px; background: #fff;
+      border-radius: 50%; box-shadow: 0 0 4px rgba(255,255,255,0.5);
+    }
+    .ctrl-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ctrl-time { font-size: 0.58rem; color: rgba(255,255,255,0.5); }
+    .ctrl-icons { display: flex; gap: 12px; }
+    .ctrl-icon {
+      width: 22px; height: 22px; background: rgba(255,255,255,0.1);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+    }
+    /* Shop the Scene panel */
+    .sts-panel {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(229,9,20,0.3);
+      border-radius: 20px 20px 0 0;
+      padding: 16px 14px 20px;
+      z-index: 10;
+    }
+    .sts-handle {
+      width: 32px; height: 3px; background: #333;
+      border-radius: 2px; margin: 0 auto 14px;
+    }
+    .sts-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .sts-logo {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.7rem; font-weight: 800; color: #fff;
+    }
+    .sts-logo-n { color: var(--red); font-size: 0.85rem; }
+    .sts-count { font-size: 0.62rem; color: var(--text-muted); }
+    .product-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid #1e1e1e;
+    }
+    .product-row:last-child { border-bottom: none; }
+    .p-thumb {
+      width: 40px; height: 40px; border-radius: 8px;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .p-info { flex: 1; min-width: 0; }
+    .p-name { font-size: 0.68rem; font-weight: 600; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .p-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .p-price { font-size: 0.63rem; color: var(--gold); font-weight: 700; }
+    .p-stores { font-size: 0.58rem; color: #555; }
+    .p-btn {
+      background: var(--red); color: #fff; border: none;
+      border-radius: 5px; padding: 4px 10px;
+      font-size: 0.62rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; font-family: inherit;
+    }
+    /* Floating shop button on player */
+    .shop-float {
+      position: absolute; bottom: 210px; right: 14px; z-index: 6;
+      background: var(--red);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 0.65rem; font-weight: 800; color: #fff;
+      display: flex; align-items: center; gap: 5px;
+      box-shadow: 0 4px 16px rgba(229,9,20,0.5);
+      animation: float-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes float-pulse {
+      0%, 100% { transform: translateY(0); box-shadow: 0 4px 16px rgba(229,9,20,0.5); }
+      50% { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(229,9,20,0.6); }
+    }
+
+    /* Glow ring around phone */
+    .phone-glow {
+      position: absolute; inset: -20px;
+      border-radius: 60px;
+      background: radial-gradient(ellipse at center, rgba(229,9,20,0.08) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ── PROBLEM SECTION ── */
+    .problem-section {
+      padding: 80px 6%; max-width: 1000px; margin: 0 auto;
+      text-align: center;
+    }
+    .problem-section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .problem-section > p {
+      color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;
+      max-width: 520px; margin: 0 auto 48px;
+    }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .problem-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 18px; text-align: left;
+    }
+    .problem-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .problem-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+    .problem-card strong { color: var(--text); display: block; font-size: 0.9rem; margin-bottom: 4px; }
+
+    /* ── HOW IT WORKS ── */
+    .section {
+      padding: 80px 6%; max-width: 1000px; margin: 0 auto;
+    }
+    .section-label {
+      text-align: center; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 10px;
+    }
+    .section h2 {
+      text-align: center; font-size: clamp(1.6rem, 3vw, 2.1rem);
+      font-weight: 800; letter-spacing: -0.02em; margin-bottom: 48px;
+    }
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2px; background: var(--border); border-radius: 14px; overflow: hidden;
+    }
+    .step {
+      background: var(--surface); padding: 32px 26px;
+      position: relative;
+    }
+    .step-num {
+      font-size: 2.5rem; font-weight: 900; color: rgba(229,9,20,0.15);
+      line-height: 1; margin-bottom: 16px; font-variant-numeric: tabular-nums;
+    }
+    .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── FEATURES ── */
+    .features-wrap { padding: 0 6% 80px; max-width: 1000px; margin: 0 auto; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .feat {
+      border-radius: 14px; padding: 28px 24px;
+      position: relative; overflow: hidden;
+    }
+    .feat.core {
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .feat.exclusive {
+      background: linear-gradient(135deg, #1a1000 0%, #120a00 100%);
+      border: 1px solid rgba(245,166,35,0.2);
+    }
+    .feat-tag {
+      display: inline-block; font-size: 0.64rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 4px; margin-bottom: 14px;
+    }
+    .feat.core .feat-tag { background: rgba(99,132,255,0.12); color: #818cf8; border: 1px solid rgba(99,132,255,0.2); }
+    .feat.exclusive .feat-tag { background: rgba(245,166,35,0.12); color: var(--gold); border: 1px solid rgba(245,166,35,0.25); }
+    .feat-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .feat h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .feat p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── SOCIAL PROOF ── */
+    .quotes-section {
+      background: var(--surface);
+      padding: 80px 6%;
+    }
+    .quotes-inner { max-width: 1000px; margin: 0 auto; }
+    .quotes-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .q-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 20px;
+    }
+    .q-problem {
+      display: inline-block; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #555; margin-bottom: 12px;
+      border-left: 2px solid #333; padding-left: 8px;
+    }
+    .q-text {
+      font-size: 0.9rem; line-height: 1.65; color: #d0d0d0;
+      margin-bottom: 16px; font-style: italic;
+    }
+    .q-author { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+
+    /* ── FINAL CTA ── */
+    .cta-section {
+      padding: 100px 6%; text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, #110005 50%, var(--bg) 100%);
+    }
+    .cta-section h2 {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 900; letter-spacing: -0.03em; margin-bottom: 14px;
+    }
+    .cta-section > p {
+      color: var(--text-muted); font-size: 1rem; margin-bottom: 40px;
+    }
+    .counter-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 20px; padding: 8px 18px; margin-bottom: 32px;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .counter-dot {
+      width: 7px; height: 7px; background: #4ade80;
+      border-radius: 50%; animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .counter-num { color: var(--text); font-weight: 700; }
+    .cta-form {
+      display: flex; flex-direction: column;
+      gap: 12px; max-width: 420px; margin: 0 auto;
+    }
+    .input-row { display: flex; gap: 8px; }
+    .cta-form input[type="email"] {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 14px 16px;
+      font-size: 0.9rem; color: var(--text);
+      font-family: inherit; outline: none;
+      transition: border-color 0.2s;
+    }
+    .cta-form input[type="email"]::placeholder { color: #444; }
+    .cta-form input[type="email"]:focus { border-color: var(--red); }
+    .btn-primary {
+      background: var(--red); color: #fff; border: none;
+      border-radius: 8px; padding: 14px 20px;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      font-family: inherit; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+    .privacy-note { font-size: 0.72rem; color: #444; text-align: center; }
+    .success-msg {
+      display: none; padding: 16px;
+      background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 10px; color: #4ade80;
+      font-size: 0.88rem; font-weight: 600; text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px 6%; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .footer-logo { font-size: 1.1rem; font-weight: 900; color: var(--red); letter-spacing: -1px; }
+    footer p { font-size: 0.74rem; color: #333; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .input-row { flex-direction: column; }
+      .phone { width: 240px; }
+      .phone-screen { height: 440px; }
+      .sts-panel { padding: 12px 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <span class="nf-logo">NETFLIX</span>
+    <span class="nav-pill">Beta privada</span>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('cta-main').scrollIntoView({behavior:'smooth'})">
+    Quiero acceso
+  </button>
+</nav>
+
+<!-- HERO: problema primero, luego solución visible -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">&#127909; Coming soon to Netflix</div>
+    <h1>Ves algo que quieres.<br>Nunca lo <em>encuentras</em>.</h1>
+    <p class="hero-sub">
+      Shop the Scene identifica los productos de tus series favoritas
+      y te lleva directo al link de compra, <span class="hero-key">sin salir de Netflix</span>.
+    </p>
+
+    <!-- MOCKUP como elemento hero -->
+    <div class="phone-wrap">
+      <div class="phone-glow"></div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <!-- Player -->
+          <div class="player-area"></div>
+          <div class="scene-info">
+            <div class="scene-badge">Bridgerton &middot; T3 E4 &middot; 28:14</div>
+            <div class="scene-progress">42:06</div>
+          </div>
+          <div class="scene-visual">
+            <div class="scene-figure">&#128507;</div>
+            <div class="scene-title">escena en reproduccion</div>
+          </div>
+
+          <!-- Controls -->
+          <div class="player-controls">
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+              <div class="progress-dot"></div>
+            </div>
+            <div class="ctrl-row">
+              <span class="ctrl-time">28:14</span>
+              <div class="ctrl-icons">
+                <div class="ctrl-icon">&#9664;</div>
+                <div class="ctrl-icon" style="background:rgba(229,9,20,0.3);">&#9646;&#9646;</div>
+                <div class="ctrl-icon">&#9654;</div>
+              </div>
+              <span class="ctrl-time">42:06</span>
+            </div>
+          </div>
+
+          <!-- Floating shop button -->
+          <div class="shop-float">&#128717; Shop the Scene</div>
+
+          <!-- Product panel -->
+          <div class="sts-panel">
+            <div class="sts-handle"></div>
+            <div class="sts-header">
+              <div class="sts-logo">
+                <span class="sts-logo-n">N</span> Shop the Scene
+              </div>
+              <span class="sts-count">3 productos en escena</span>
+            </div>
+
+            <div class="product-row">
+              <div class="p-thumb" style="background:#231040;">&#128507;</div>
+              <div class="p-info">
+                <div class="p-name">Vestido floral Daphne</div>
+                <div class="p-meta">
+                  <span class="p-price">$89.900</span>
+                  <span class="p-stores">Zara, ASOS +2</span>
+                </div>
+              </div>
+              <button class="p-btn">Ver</button>
+            </div>
+
+            <div class="product-row">
+              <div class="p-thumb" style="background:#102030;">&#128141;</div>
+              <div class="p-info">
+                <div class="p-name">Anillo perla vintage</div>
+                <div class="p-meta">
+                  <span class="p-price">$32.500</span>
+                  <span class="p-stores">Etsy, MercadoLibre</span>
+                </div>
+              </div>
+              <button class="p-btn">Ver</button>
+            </div>
+
+            <div class="product-row">
+              <div class="p-thumb" style="background:#102010;">&#127980;</div>
+              <div class="p-info">
+                <div class="p-name">Sombrero ala ancha</div>
+                <div class="p-meta">
+                  <span class="p-price">$45.000</span>
+                  <span class="p-stores">MercadoLibre</span>
+                </div>
+              </div>
+              <button class="p-btn">Ver</button>
+            </div>
+          </div>
+
+        </div><!-- /phone-screen -->
+      </div><!-- /phone -->
+    </div><!-- /phone-wrap -->
+  </div>
+</section>
+
+<!-- PROBLEMA: contexto antes de pedir el correo -->
+<div style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<div class="problem-section">
+  <h2>Esto te ha pasado antes</h2>
+  <p>Lo buscamos en Google, no lo encontramos exacto, y lo dejamos para despues. Generalmente para siempre.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">&#9654;</div>
+      <strong>Pausas la serie</strong>
+      <p>Ves algo que te gusta y pausas para no perder el detalle. Pero el momento ya paso.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">&#128269;</div>
+      <strong>Buscas en Google</strong>
+      <p>"Vestido rojo personaje serie Netflix" devuelve 500 resultados que no tienen nada que ver.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">&#128722;</div>
+      <strong>No encuentras lo exacto</strong>
+      <p>Encuentras algo parecido pero no igual. No esta disponible, o cuesta el doble de lo que esperabas.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">&#128473;</div>
+      <strong>Lo dejas para despues</strong>
+      <p>Lo guardas en favoritos o simplemente lo olvidas. El impulso desaparece y nunca compras.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-label">La solucion</div>
+  <h2>De la pantalla al carrito, sin salir de Netflix</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Toca Shop the Scene</h3>
+      <p>En cualquier momento del video aparece el boton flotante. Un toque y ves los productos de esa escena exacta, sin interrumpir la serie.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Ve precio y tiendas</h3>
+      <p>Producto exacto con imagen, precio y link de compra. Si no esta disponible en tu pais o presupuesto, te mostramos alternativas similares.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Compra o guarda</h3>
+      <p>Compras en la tienda directamente o lo agregas a tu lista de deseos en Netflix. La serie sigue sola mientras tu decides.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES: solo 3 -->
+<div class="features-wrap">
+  <div class="section-label" style="text-align:center;margin-bottom:10px;">Lo que incluye</div>
+  <h2 class="section" style="padding:0 0 32px;text-align:center;">Lo esencial y lo que no esperas</h2>
+  <div class="features-grid">
+    <div class="feat core">
+      <div class="feat-tag">Esencial</div>
+      <div class="feat-icon">&#128269;</div>
+      <h4>Producto exacto con link de compra</h4>
+      <p>Cada producto identificado en escena aparece con imagen, precio actualizado y link directo a la tienda. No mas busquedas vagas.</p>
+    </div>
+    <div class="feat core">
+      <div class="feat-tag">Esencial</div>
+      <div class="feat-icon">&#8596;&#65039;</div>
+      <h4>Alternativas si no hay stock o no es tu precio</h4>
+      <p>Si el producto exacto no esta disponible, te mostramos opciones similares en rango de precio, estilo y disponibilidad en tu pais.</p>
+    </div>
+    <div class="feat exclusive">
+      <div class="feat-tag">Exclusivo</div>
+      <div class="feat-icon">&#9889;</div>
+      <h4>Drops antes del estreno de temporada</h4>
+      <p>Acceso anticipado a prendas y objetos inspirados en la proxima temporada. Los ves antes que nadie, disponibles antes de que salga el episodio.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF: citas reales de investigacion -->
+<div class="quotes-section">
+  <div class="quotes-inner">
+    <div class="section-label" style="text-align:center;margin-bottom:10px;">Por que existe Shop the Scene</div>
+    <h2 class="section" style="padding:0 0 40px;text-align:center;">Ya lo buscan. Solo les falta el canal.</h2>
+    <div class="quotes-grid">
+      <div class="q-card">
+        <span class="q-problem">Usuario real</span>
+        <p class="q-text">"Cada vez que veo algo en una serie lo busco en Amazon o Mercado Libre. Si no lo encuentro exacto, me quedo con las ganas. Ya me paso con las medias de abeja de Yo antes de ti."</p>
+        <div class="q-author">Mujer, 21 anos &mdash; usuaria entrevistada</div>
+      </div>
+      <div class="q-card">
+        <span class="q-problem">Usuario real</span>
+        <p class="q-text">"Tengo una lista guardada de cosas que vi en series y quise tener. Siempre los busco despues, pero casi nunca los encuentro igualitos al de la serie."</p>
+        <div class="q-author">Mujer, 32 anos &mdash; usuaria entrevistada</div>
+      </div>
+      <div class="q-card">
+        <span class="q-problem">Usuario real</span>
+        <p class="q-text">"Si el producto hubiera estado disponible a buen precio en el momento en que lo vi, lo compraba de inmediato. El problema es tener que buscarlo despues por mi cuenta."</p>
+        <div class="q-author">Hombre, 25 anos &mdash; usuario entrevistado</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="cta-section" id="cta-main">
+  <h2>Se de los primeros en usarlo</h2>
+  <p>Acceso anticipado a lista cerrada. Cupos limitados.</p>
+  <div class="counter-badge">
+    <div class="counter-dot"></div>
+    <span><span class="counter-num" id="counter-display">312</span> personas ya en la lista</span>
+  </div>
+  <div class="cta-form">
+    <div class="input-row">
+      <input type="email" id="email-main" placeholder="tu@correo.com" />
+      <button class="btn-primary" onclick="handleSubmit()">Quiero acceso anticipado</button>
+    </div>
+    <div class="success-msg" id="success-main">Listo, quedaste en la lista. Te avisamos cuando lancemos.</div>
+    <p class="privacy-note">Sin spam. Solo te escribimos cuando lancemos.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NETFLIX</div>
+  <p>Shop the Scene es un concepto en beta privada &mdash; 2026</p>
+</footer>
+
+<script>
+  // Animacion de contador (empieza en 312, crece lentamente)
+  var base = 312;
+  var el = document.getElementById('counter-display');
+  setInterval(function() {
+    if (Math.random() < 0.15) {
+      base += 1;
+      el.textContent = base;
+    }
+  }, 8000);
+
+  function handleSubmit() {
+    var input = document.getElementById('email-main');
+    var success = document.getElementById('success-main');
+    var email = input.value.trim();
+    if (!email || !email.includes('@')) {
+      input.style.borderColor = '#E50914';
+      input.focus();
+      setTimeout(function() { input.style.borderColor = ''; }, 2000);
+      return;
+    }
+    document.querySelector('.input-row').style.display = 'none';
+    success.style.display = 'block';
+    base += 1;
+    el.textContent = base;
+    // Para Google Forms, descomenta:
+    // window.open('TU_GOOGLE_FORM_URL?entry.XXXXX=' + encodeURIComponent(email), '_blank');
+  }
+</script>
+</body>
+</html>
